@@ -35,7 +35,20 @@ app.use("/products", productsRouter);
 
 app.use((err, req, res, next) => {
   console.error('Error details:', err);
-  res.status(500).send('Internal Server Error');
+  console.error('Error stack:', err.stack);
+  
+  if (process.env.NODE_ENV === 'development') {
+    res.status(500).json({
+      error: err.message,
+      stack: err.stack
+    });
+  } else {
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.use((req, res) => {
+  res.status(404).send('Page not found');
 });
 
 app.listen(3000);
