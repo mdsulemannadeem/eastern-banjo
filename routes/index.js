@@ -30,12 +30,23 @@ router.get("/", async function (req, res) {
     let user = { wishlist: [] };
     
     if (loggedin) {
-      // Get fresh user data with populated wishlist
-      const decoded = jwt.verify(req.cookies.token, process.env.JWT_KEY);
-      user = await userModel.findOne({ email: decoded.email }).select("-password");
+      try {
+        // Get fresh user data with populated wishlist
+        const decoded = jwt.verify(req.cookies.token, process.env.JWT_KEY);
+        user = await userModel.findOne({ email: decoded.email }).select("-password");
+        
+        // If user not found despite valid token
+        if (!user) {
+          res.cookie("token", "", { expires: new Date(0) }); // Clear invalid token
+          throw new Error("User not found");
+        }
+      } catch (jwtErr) {
+        console.error("JWT verification error:", jwtErr.message);
+        res.cookie("token", "", { expires: new Date(0) }); // Clear invalid token
+      }
     }
     
-    res.render("home", { error, message, loggedin, products, user });
+    res.render("home", { error, message, loggedin: user ? true : false, products, user: user || { wishlist: [] } });
   } catch (err) {
     console.error(err.message);
     res.render("home", { error: [], message: [], loggedin: false, products: [], user: { wishlist: [] } });
@@ -239,7 +250,7 @@ router.get("/profile", isloggedin, async function (req, res) {
 // Update profile route
 router.post("/profile/update", isloggedin, async function (req, res) {
   try {
-    const { fullname } = req.body;
+    const { fullname, contact } = req.body; // Extract contact from request body
     
     // Update user info
     await userModel.findOneAndUpdate(
