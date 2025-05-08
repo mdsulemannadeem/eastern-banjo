@@ -7,8 +7,6 @@ const flash = require("connect-flash");
 
 require("dotenv").config();
 
-
-
 const ownersRouter = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
@@ -29,19 +27,11 @@ app.use(
 app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 
 app.use("/", indexRouter);
 app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 
-app.use((err, req, res, next) => {
-  console.error('ERROR:', err.message, err.stack);
-  res.status(500).render('error', { 
-    error: process.env.NODE_ENV === 'production' ? 'Server Error' : err.message,
-    message: 'We encountered an issue processing your request'
-  });
-});
 
 app.listen(3000);
