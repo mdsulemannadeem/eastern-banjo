@@ -239,7 +239,7 @@ router.get("/profile", isloggedin, async function (req, res) {
 // Update profile route
 router.post("/profile/update", isloggedin, async function (req, res) {
   try {
-    const { fullname } = req.body;
+    const { fullname, contact } = req.body; // Added contact variable here
     
     // Update user info
     await userModel.findOneAndUpdate(
