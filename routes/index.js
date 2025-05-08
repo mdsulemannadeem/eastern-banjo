@@ -37,12 +37,7 @@ router.get("/", async function (req, res) {
     
     res.render("home", { error, message, loggedin, products, user });
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.render("home", { error: [], message: [], loggedin: false, products: [], user: { wishlist: [] } });
   }
 });
@@ -64,12 +59,7 @@ router.get("/shop", isloggedin, async function (req, res) {
             user: req.user // Make sure this is populated by your isloggedin middleware
         });
     } catch (err) {
-        console.error("Detailed error info:", { 
-          message: err.message,
-          stack: err.stack,
-          route: req.originalUrl,
-          method: req.method 
-        });
+        console.error(err.message);
         res.status(500).send("Internal Server Error");
     }
 });
@@ -136,12 +126,7 @@ router.get("/cart", isloggedin, async function (req, res) {
       shippingFee: "FREE"
     });
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -174,12 +159,7 @@ router.get("/addtocart/:productid", isloggedin, async function (req, res) {
     req.flash("success", "Product added to cart");
     res.redirect("/cart");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -201,12 +181,7 @@ router.get("/increasequantity/:productid", isloggedin, async function (req, res)
     
     res.redirect("/cart");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -233,12 +208,7 @@ router.get("/decreasequantity/:productid", isloggedin, async function (req, res)
     
     res.redirect("/cart");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -261,12 +231,7 @@ router.get("/profile", isloggedin, async function (req, res) {
     
     res.render("profile", { user, success });
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -274,8 +239,7 @@ router.get("/profile", isloggedin, async function (req, res) {
 // Update profile route
 router.post("/profile/update", isloggedin, async function (req, res) {
   try {
-    // Fix this line - contact was not defined
-    const { fullname, contact } = req.body;
+    const { fullname } = req.body;
     
     // Update user info
     await userModel.findOneAndUpdate(
@@ -324,12 +288,7 @@ router.post("/profile/change-password", isloggedin, async function (req, res) {
     req.flash("success", "Password changed successfully");
     res.redirect("/profile");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     req.flash("error", "Failed to change password");
     res.redirect("/profile");
   }
@@ -351,12 +310,7 @@ router.get("/order/:orderId", isloggedin, async function (req, res) {
     
     res.render("order-details", { user, order });
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     req.flash("error", "Failed to load order details");
     res.redirect("/profile");
   }
@@ -372,12 +326,7 @@ router.get("/wishlist", isloggedin, async function (req, res) {
     
     res.render("wishlist", { user });
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -421,12 +370,7 @@ router.get("/addtowishlist/:productid", isloggedin, async function (req, res) {
         const referer = req.headers.referer || "/shop";
         res.redirect(referer);
     } catch (err) {
-        console.error("Detailed error info:", { 
-          message: err.message,
-          stack: err.stack,
-          route: req.originalUrl,
-          method: req.method 
-        });
+        console.error(err.message);
         if (req.xhr || req.headers.accept.includes('application/json')) {
             return res.status(500).json({ success: false, message: "Internal Server Error" });
         }
@@ -468,12 +412,7 @@ router.get("/removefromwishlist/:productid", isloggedin, async function (req, re
       res.redirect("/wishlist");
     }
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     
     if (req.xhr || req.headers.accept.includes('application/json')) {
       return res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -513,12 +452,7 @@ router.get("/movetocart/:productid", isloggedin, async function (req, res) {
     
     res.redirect("/cart");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
 });

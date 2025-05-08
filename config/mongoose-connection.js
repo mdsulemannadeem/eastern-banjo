@@ -31,18 +31,25 @@ try {
 // Only attempt connection if we have a URI
 if (mongoURI) {
   mongoose.connect(mongoURI, {
-    serverSelectionTimeoutMS: 30000, // Timeout after 30s
-    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-    family: 4 // Use IPv4, avoid IPv6 issues
+    serverSelectionTimeoutMS: 30000, // Increase timeout for Vercel cold starts
+    socketTimeoutMS: 45000,          // Increase socket timeout
+    family: 4,                       // Use IPv4, avoid IPv6 issues
+    maxPoolSize: 10                  // Limit connection pool for serverless
   })
-  .then(() => console.log('MongoDB connected successfully in', process.env.NODE_ENV, 'mode'))
+  .then(() => {
+    console.log(`MongoDB connected in ${process.env.NODE_ENV || 'development'} mode`);
+  })
   .catch(err => {
-    console.error('MongoDB connection error details:', {
-      error: err.message,
-      stack: err.stack,
+    console.error('MongoDB connection error:', {
+      message: err.message,
       code: err.code,
       name: err.name
     });
+    // Don't exit the process in production - let the request finish with an error
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Exiting due to MongoDB connection error in development');
+      process.exit(1);
+    }
   });
 } else {
   console.error('MongoDB connection skipped due to missing URI');
