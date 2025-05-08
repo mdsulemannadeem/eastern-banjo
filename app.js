@@ -26,9 +26,6 @@ app.use(
 );
 app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
-
-// Set views directory explicitly
-app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 app.use("/", indexRouter);
@@ -38,20 +35,7 @@ app.use("/products", productsRouter);
 
 app.use((err, req, res, next) => {
   console.error('Error details:', err);
-  console.error('Error stack:', err.stack);
-  
-  if (process.env.NODE_ENV === 'development') {
-    res.status(500).json({
-      error: err.message,
-      stack: err.stack
-    });
-  } else {
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.use((req, res) => {
-  res.status(404).send('Page not found');
+  res.status(500).send('Internal Server Error');
 });
 
 app.listen(3000);
