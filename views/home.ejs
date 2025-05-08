@@ -1,0 +1,360 @@
+<%- include('./partials/marquee') %>
+
+<%- include('./partials/header') %>
+
+<!-- Products section with responsive grid -->
+<div class="w-full py-3 px-4 md:px-12 flex flex-col gap-3">
+    <% if (products && products.length) { %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <% products.forEach(function(pro) { %>
+                <div class="bg-red-500 rounded overflow-hidden">
+                    <div class="w-full h-52 flex justify-between items-center bg-[<%= pro.bgcolor %>]">
+                        <img class="h-[10rem] mx-auto" src="data:image/jpeg;base64,<%= pro.image ? pro.image.toString('base64') : '' %>" alt="<%= pro.name %>">
+                    </div>
+                    <div class="flex justify-between bg-[<%= pro.panelcolor %>] items-center px-4 py-4 text-[<%= pro.textcolor %>]">
+                        <div>
+                            <h3><%= pro.name %></h3>
+                            <h4 data-price="<%= pro.price %>">₹ <%= pro.price %></h4>
+                        </div>
+                        <div class="flex gap-2">
+                            <a class="wishlist-button w-7 h-7 flex items-center justify-center rounded-full bg-white" 
+                               href="<%= loggedin ? `/addtowishlist/${pro._id}` : '/login?redirect=true' %>"
+                               onclick="<%= loggedin ? 'event.preventDefault(); addToWishlist(this, \'' + pro._id + '\')' : '' %>">
+                                <% if(loggedin && typeof user !== 'undefined' && user && user.wishlist && user.wishlist.some(item => item.toString() === pro._id.toString())) { %>
+                                    <i class="ri-heart-fill text-red-500"></i>
+                                <% } else { %>
+                                    <i class="ri-heart-line"></i>
+                                <% } %>
+                            </a>
+                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white" 
+                               href="<%= loggedin ? `/addtocart/${pro._id}` : '/login?redirect=true' %>">
+                                <i class="ri-add-line"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p class="text-center py-8">No products available.</p>
+    <% } %>
+</div>
+
+<%- include('./partials/marquee2') %>
+
+<!-- Video section - responsive -->
+<div class="videosection mb-8 mt-8 px-4 md:px-12 w-full">
+   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
+       <div class="border border-black-200 rounded-lg h-64 md:h-96 overflow-hidden">
+         <video class="h-full w-full object-cover" controls autoplay loop muted src="/images/vid1.mp4"></video>
+       </div>
+       <div class="border border-black-200 rounded-lg h-64 md:h-96 bg-red-500 overflow-hidden">
+        <video class="h-full w-full object-cover" controls autoplay loop muted src="/images/vid2.mp4"></video>
+       </div>
+       <div class="border border-black-200 rounded-lg h-64 md:h-96 bg-red-500 overflow-hidden">
+        <video class="h-full w-full object-cover" controls autoplay loop muted src="/images/vid3.mp4"></video>
+       </div>
+       <div class="border border-black-200 rounded-lg h-64 md:h-96 bg-red-500 overflow-hidden">
+        <video class="h-full w-full object-cover" controls autoplay loop muted src="/images/vid4.mp4"></video>
+       </div>
+   </div>
+</div>
+
+<!-- Carousel section - responsive height -->
+<div class="whoweare w-full relative">
+    <div id="couresel1" class="w-full relative h-[50vh] md:h-[70vh] lg:h-[90vh]">
+        <img class="w-full h-full object-cover" src="/images/s1.jpg" alt="">
+        <div class="content absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center bg-white p-4 md:p-8 rounded-lg max-w-[85%] md:max-w-[70%] lg:max-w-[50%]">
+            <h1 class="text-2xl md:text-4xl font-bold text-black">Who We Are</h1>
+            <p class="text-black text-sm md:text-base mt-2 md:mt-4">We are a team of passionate individuals dedicated to providing the best products and services to our customers. Our mission is to deliver quality and excellence in everything we do.</p>
+            <a href="/shop" class="inline-block mt-3 md:mt-4 bg-red-500 text-white px-4 py-2 rounded text-sm md:text-base">Learn More</a>
+        </div>
+    </div>
+    
+    <div id="couresel2" class="w-full relative h-[50vh] md:h-[70vh] lg:h-[90vh]">
+        <img class="w-full h-full object-cover" src="/images/img1.jpg" alt="">
+        <div class="content absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center bg-white p-4 md:p-8 rounded-lg max-w-[85%] md:max-w-[70%] lg:max-w-[50%]">
+            <h1 class="text-2xl md:text-4xl font-bold text-black">Our Mission</h1>
+            <p class="text-black text-sm md:text-base mt-2 md:mt-4">To provide high-quality products that enhance our customers' lives and exceed their expectations through innovation and dedication.</p>
+            <a href="/about" class="inline-block mt-3 md:mt-4 bg-red-500 text-white px-4 py-2 rounded text-sm md:text-base">About Us</a>
+        </div>
+    </div>
+
+    <div id="couresel3" class="w-full relative h-[50vh] md:h-[70vh] lg:h-[90vh]">
+        <img class="w-full h-full object-cover" src="/images/s2.jpg" alt="">
+        <div class="content absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center bg-white p-4 md:p-8 rounded-lg max-w-[85%] md:max-w-[70%] lg:max-w-[50%]">
+            <h1 class="text-2xl md:text-4xl font-bold text-black">Our Products</h1>
+            <p class="text-black text-sm md:text-base mt-2 md:mt-4">Discover our range of high-quality products designed with care and attention to detail. We take pride in every item we offer.</p>
+            <a href="/shop" class="inline-block mt-3 md:mt-4 bg-red-500 text-white px-4 py-2 rounded text-sm md:text-base">Shop Now</a>
+        </div>
+    </div>
+
+    <script>
+      // Configuration
+      const carouselConfig = {
+        autoSlideInterval: 5000, // Time between slides in ms
+        transitionSpeed: 500,    // Transition speed in ms
+        slideElementIds: ['couresel1', 'couresel2', 'couresel3']
+      };
+      
+      // Wait for document to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize variables
+        let currentSlide = 0;
+        const slides = carouselConfig.slideElementIds.map(id => document.getElementById(id));
+        let autoSlideTimer;
+        
+        // Create and append control elements instead of using innerHTML
+        function initializeCarousel() {
+          // First ensure all slides except the first one are hidden
+          slides.forEach((slide, index) => {
+            if (index === 0) {
+              slide.style.display = 'block';
+              slide.style.opacity = '1';
+            } else {
+              slide.style.display = 'none';
+              slide.style.opacity = '0';
+            }
+          });
+          
+          // Create controls container
+          const carousel = document.querySelector('.whoweare');
+          const controlsContainer = document.createElement('div');
+          controlsContainer.className = 'carousel-controls absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4';
+          
+          // Create prev button
+          const prevBtn = document.createElement('button');
+          prevBtn.className = 'prev-btn bg-white text-black p-2 rounded-full shadow-lg';
+          prevBtn.innerHTML = '<i class="ri-arrow-left-s-line text-xl"></i>';
+          prevBtn.addEventListener('click', prevSlide);
+          
+          // Create dots container
+          const dotsContainer = document.createElement('div');
+          dotsContainer.className = 'carousel-dots flex gap-2';
+          
+          // Create next button
+          const nextBtn = document.createElement('button');
+          nextBtn.className = 'next-btn bg-white text-black p-2 rounded-full shadow-lg';
+          nextBtn.innerHTML = '<i class="ri-arrow-right-s-line text-xl"></i>';
+          nextBtn.addEventListener('click', nextSlide);
+          
+          // Add all elements to DOM
+          controlsContainer.appendChild(prevBtn);
+          controlsContainer.appendChild(dotsContainer);
+          controlsContainer.appendChild(nextBtn);
+          carousel.appendChild(controlsContainer);
+          
+          // Create dot indicators
+          slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('carousel-dot', 'w-3', 'h-3', 'rounded-full', 'cursor-pointer');
+            dot.classList.add(index === 0 ? 'bg-red-500' : 'bg-gray-300');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+          });
+          
+          // Start auto-sliding
+          startAutoSlide();
+        }
+        
+        // Navigation functions
+        function goToSlide(index) {
+          const oldSlide = slides[currentSlide];
+          currentSlide = index;
+          if (currentSlide < 0) currentSlide = slides.length - 1;
+          if (currentSlide >= slides.length) currentSlide = 0;
+          const newSlide = slides[currentSlide];
+          
+          // Update dots
+          document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            if (i === currentSlide) {
+              dot.classList.add('bg-red-500');
+              dot.classList.remove('bg-gray-300');
+            } else {
+              dot.classList.add('bg-gray-300');
+              dot.classList.remove('bg-red-500');
+            }
+          });
+          
+          // Animate transition
+          oldSlide.style.opacity = '0';
+          setTimeout(() => {
+            oldSlide.style.display = 'none';
+            newSlide.style.display = 'block';
+            setTimeout(() => {
+              newSlide.style.opacity = '1';
+            }, 50);
+          }, carouselConfig.transitionSpeed);
+          
+          // Reset auto-slide timer
+          restartAutoSlide();
+        }
+        
+        function nextSlide() {
+          goToSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+          goToSlide(currentSlide - 1);
+        }
+        
+        // Auto-slide functions
+        function startAutoSlide() {
+          autoSlideTimer = setInterval(nextSlide, carouselConfig.autoSlideInterval);
+        }
+        
+        function restartAutoSlide() {
+          clearInterval(autoSlideTimer);
+          startAutoSlide();
+        }
+        
+        // Add CSS for transitions
+        const style = document.createElement('style');
+        style.innerHTML = `
+          #couresel1, #couresel2, #couresel3 {
+            transition: opacity ${carouselConfig.transitionSpeed}ms ease-in-out;
+          }
+          .carousel-dot {
+            transition: background-color 0.3s;
+          }
+          
+          /* Responsive carousel content */
+          @media (max-width: 640px) {
+            .content {
+              width: 90%;
+              padding: 15px;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize the carousel
+        initializeCarousel();
+      });
+    </script>
+</div>
+<script>
+  // Make user object available to client-side script
+  window.user = <%= JSON.stringify(user || {}) %>;
+  window.loggedin = <%= loggedin || false %>;
+</script>
+<script src="/javascripts/wish.js"></script>
+
+<!-- From Our Hands to Yours - Banjo Creation Journey -->
+<div class="journey-section py-12 md:py-20 px-4 md:px-12 w-full bg-amber-50">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-3 text-amber-900">From Our Hands to Yours</h2>
+    <p class="text-center text-lg md:text-xl text-amber-800 mb-10">A banjo isn't built. It's born — from wood, fire, and love.</p>
+    
+    <div class="journey-container relative">
+        <div class="journey-progress-bar sticky top-0 w-full h-2 bg-amber-200 z-10">
+            <div class="progress bg-amber-800 h-full w-0 transition-all duration-300"></div>
+        </div>
+        
+        <div class="journey-steps">
+            <!-- Step 1 -->
+            <div class="journey-step flex flex-col md:flex-row items-center gap-8 py-16 opacity-0 transform translate-y-10 transition-all duration-700">
+                <div class="md:w-1/2">
+                    <img src="/images/wood-selection.jpg" alt="Wood Selection" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-amber-900">🪵 Step 1: The Wood</h3>
+                    <p class="text-lg text-amber-800">We begin with seasoned mahogany and maple, hand-selected for resonance.</p>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="journey-step flex flex-col-reverse md:flex-row items-center gap-8 py-16 opacity-0 transform translate-y-10 transition-all duration-700">
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-amber-900">🔨 Step 2: The Carve</h3>
+                    <p class="text-lg text-amber-800">Each piece is shaped by master hands — not machines.</p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="/images/carving.jpg" alt="Carving Process" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="journey-step flex flex-col md:flex-row items-center gap-8 py-16 opacity-0 transform translate-y-10 transition-all duration-700">
+                <div class="md:w-1/2">
+                    <img src="/images/assembly.jpg" alt="Assembly Process" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-amber-900">🧩 Step 3: Assembly</h3>
+                    <p class="text-lg text-amber-800">Bringing together every detail, like fitting the soul into the body.</p>
+                </div>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="journey-step flex flex-col-reverse md:flex-row items-center gap-8 py-16 opacity-0 transform translate-y-10 transition-all duration-700">
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-amber-900">🪞 Step 4: Polish & Finish</h3>
+                    <p class="text-lg text-amber-800">Smooth, rich, and ready to shine — just like the sound it holds.</p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="/images/polish.jpg" alt="Polishing Process" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+            </div>
+            
+            <!-- Step 5 -->
+            <div class="journey-step flex flex-col md:flex-row items-center gap-8 py-16 opacity-0 transform translate-y-10 transition-all duration-700">
+                <div class="md:w-1/2">
+                    <img src="/images/first-strum.jpg" alt="First Strum" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-amber-900">🎼 Step 5: The First Strum</h3>
+                    <p class="text-lg text-amber-800">And then... music. Your music.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const journeySteps = document.querySelectorAll('.journey-step');
+        const progressBar = document.querySelector('.journey-progress-bar .progress');
+        
+        // Show first step immediately
+        if (journeySteps.length > 0) {
+            journeySteps[0].classList.add('opacity-100');
+            journeySteps[0].classList.remove('translate-y-10');
+        }
+        
+        // Function to check if element is in viewport
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight * 0.75) &&
+                rect.bottom >= (window.innerHeight * 0.25)
+            );
+        }
+        
+        // Function to handle scroll
+        function handleScroll() {
+            // Update progress bar
+            const journeySection = document.querySelector('.journey-section');
+            const journeyRect = journeySection.getBoundingClientRect();
+            const progress = Math.max(0, Math.min(1, 
+                1 - (journeyRect.bottom - window.innerHeight) / (journeySection.offsetHeight)
+            ));
+            
+            progressBar.style.width = `${progress * 100}%`;
+            
+            // Update step visibility
+            journeySteps.forEach((step, index) => {
+                if (isElementInViewport(step)) {
+                    step.classList.add('opacity-100');
+                    step.classList.remove('translate-y-10');
+                }
+            });
+        }
+        
+        // Attach scroll listener
+        window.addEventListener('scroll', handleScroll);
+        
+        // Call once to set initial state
+        handleScroll();
+    });
+</script>
+
+<%- include('./partials/footer') %>
