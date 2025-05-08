@@ -33,5 +33,9 @@ app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 
+app.use((err, req, res, next) => {
+  console.error('Error details:', err);
+  res.status(500).send('Internal Server Error');
+});
 
 app.listen(3000);
