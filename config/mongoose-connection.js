@@ -30,9 +30,20 @@ try {
 
 // Only attempt connection if we have a URI
 if (mongoURI) {
-  mongoose.connect(mongoURI)
-    .then(() => dbgr('MongoDB connected successfully!'))
-    .catch(err => dbgr('MongoDB connection error:', err));
+  mongoose.connect(mongoURI, {
+    serverSelectionTimeoutMS: 30000, // Timeout after 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+    family: 4 // Use IPv4, avoid IPv6 issues
+  })
+  .then(() => console.log('MongoDB connected successfully in', process.env.NODE_ENV, 'mode'))
+  .catch(err => {
+    console.error('MongoDB connection error details:', {
+      error: err.message,
+      stack: err.stack,
+      code: err.code,
+      name: err.name
+    });
+  });
 } else {
   console.error('MongoDB connection skipped due to missing URI');
 }

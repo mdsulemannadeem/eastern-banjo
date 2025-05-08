@@ -274,7 +274,8 @@ router.get("/profile", isloggedin, async function (req, res) {
 // Update profile route
 router.post("/profile/update", isloggedin, async function (req, res) {
   try {
-    const { fullname } = req.body;
+    // Fix this line - contact was not defined
+    const { fullname, contact } = req.body;
     
     // Update user info
     await userModel.findOneAndUpdate(
@@ -285,12 +286,7 @@ router.post("/profile/update", isloggedin, async function (req, res) {
     req.flash("success", "Profile updated successfully");
     res.redirect("/profile");
   } catch (err) {
-    console.error("Detailed error info:", { 
-      message: err.message,
-      stack: err.stack,
-      route: req.originalUrl,
-      method: req.method 
-    });
+    console.error(err.message);
     req.flash("error", "Failed to update profile");
     res.redirect("/profile");
   }
