@@ -18,6 +18,50 @@ router.get("/register", function(req, res) {
   res.render("index", { error: [], message: "", loggedin: false });
 });
 
+// Add email validation middleware
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
+// Add register post route
+router.post("/users/register", async function(req, res) {
+  try {
+    const { email, password, fullname, contact } = req.body;
+    
+    // Validate email
+    if (!validateEmail(email)) {
+      req.flash("error", "Please enter a valid email address");
+      return res.redirect("/register");
+    }
+
+    // Check if user already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      req.flash("error", "Email already registered");
+      return res.redirect("/register");
+    }
+
+    // Create new user
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    const newUser = new userModel({
+      email,
+      password: hashedPassword,
+      fullname,
+      contact
+    });
+
+    await newUser.save();
+    req.flash("success", "Registration successful! Please login.");
+    res.redirect("/login");
+  } catch (err) {
+    console.error(err.message);
+    req.flash("error", "Registration failed. Please try again.");
+    res.redirect("/register");
+  }
+});
 
 router.get("/", async function (req, res) {
   try {
